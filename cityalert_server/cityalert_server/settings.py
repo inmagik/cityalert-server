@@ -127,6 +127,10 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'authtools.User'
 
+JWT_AUTH = {
+    'JWT_VERIFY_EXPIRATION': False,
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
