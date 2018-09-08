@@ -27,3 +27,14 @@ class AlertResponseViewSet(ModelViewSet):
 class AlertTypeViewSet(ModelViewSet):
     serializer_class = AlertTypeSerializer
     queryset = AlertType.objects.all()
+
+
+class SimilarAlertsView(APIView):
+    def post(self, request):
+        ser = AlertSerializer(request.data)
+        ser.is_valid(raise_exception=True)
+        similar_alerts = Alert.objects.filter(
+            alert_type__pk=ser.validated_data['pk']
+        )
+        out_ser = AlertSerializer(instance=similar_alerts, many=True)
+        return Response(out_ser.data)
