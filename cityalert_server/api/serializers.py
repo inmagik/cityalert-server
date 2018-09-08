@@ -19,6 +19,8 @@ class AlertSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         return instance.votes.filter(user=user).count() > 0
 
+    alert_type_verbose = serializers.CharField(read_only=True, source='alert_type.name')
+
     class Meta:
         model = Alert
         fields = "__all__"
