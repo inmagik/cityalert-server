@@ -9,10 +9,9 @@ class AlertTypeSerializer(serializers.ModelSerializer):
 
 
 class AlertSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
     votes_count = serializers.SerializerMethodField()
     vote_by_me = serializers.SerializerMethodField()
-
+    image = Base64ImageField(required=False)
 
     def get_votes_count(self, instance):
         return instance.votes.count()
