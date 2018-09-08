@@ -10,6 +10,8 @@ class AlertTypeSerializer(serializers.ModelSerializer):
 
 class AlertSerializer(serializers.ModelSerializer):
 
+    alert_type_verbose = serializers.CharField(read_only=True, source='alert_type.name')
+
     class Meta:
         model = Alert
         fields = "__all__"
