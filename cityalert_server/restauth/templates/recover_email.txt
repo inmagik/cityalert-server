@@ -1,0 +1,2 @@
+Clicca il link seguente per resettare la password:
+{{base_url}}/reset/{{token}}
