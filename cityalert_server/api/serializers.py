@@ -1,5 +1,11 @@
 from rest_framework import serializers
-from alert.models import Alert, AlertResponse
+from alert.models import Alert, AlertResponse, AlertType
+
+
+class AlertTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlertType
+        fields = "__all__"
 
 
 class AlertSerializer(serializers.ModelSerializer):

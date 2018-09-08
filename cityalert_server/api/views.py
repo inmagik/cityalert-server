@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from .serializers import AlertSerializer, AlertResponseSerializer
+from .serializers import AlertSerializer, AlertResponseSerializer, AlertTypeSerializer, AlertType
 from alert.models import Alert, AlertResponse
 
 
@@ -11,3 +11,8 @@ class AlertViewSet(ModelViewSet):
 class AlertResponseViewSet(ModelViewSet):
     serializer_class = AlertResponseSerializer
     queryset = AlertResponse.objects.all()
+
+
+class AlertTypeViewSet(ModelViewSet):
+    serializer_class = AlertTypeSerializer
+    queryset = AlertType.objects.all()
