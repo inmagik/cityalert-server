@@ -31,10 +31,10 @@ class AlertTypeViewSet(ModelViewSet):
 
 class SimilarAlertsView(APIView):
     def post(self, request):
-        ser = AlertSerializer(request.data)
+        ser = AlertSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
         similar_alerts = Alert.objects.filter(
-            alert_type__pk=ser.validated_data['pk']
+            alert_type=ser.validated_data['alert_type']
         )
-        out_ser = AlertSerializer(instance=similar_alerts, many=True)
+        out_ser = AlertSerializer(instance=similar_alerts, many=True, context={'request': request})
         return Response(out_ser.data)
