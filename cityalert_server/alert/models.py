@@ -49,6 +49,7 @@ class Alert(models.Model):
 
     position = models.PointField(blank=True, null=True)
     location = models.CharField(blank=True, null=True, max_length=256)
+    image = models.ImageField(blank=True, null=True)
 
     response = models.ForeignKey(AlertResponse, models.CASCADE, null=True, blank=True, related_name="alerts")
 
