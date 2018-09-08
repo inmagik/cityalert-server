@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from alert.models import Alert, AlertResponse, AlertType
-
+from drf_extra_fields.fields import Base64ImageField
 
 class AlertTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,8 +9,10 @@ class AlertTypeSerializer(serializers.ModelSerializer):
 
 
 class AlertSerializer(serializers.ModelSerializer):
+    image = Base64ImageField()
     votes_count = serializers.SerializerMethodField()
     vote_by_me = serializers.SerializerMethodField()
+
 
     def get_votes_count(self, instance):
         return instance.votes.count()
