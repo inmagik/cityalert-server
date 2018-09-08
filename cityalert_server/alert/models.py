@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 from django.conf import settings
 
 
@@ -47,8 +47,7 @@ class Alert(models.Model):
     description = models.TextField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
 
-    lat = models.FloatField(blank=True, null=True)
-    lon = models.FloatField(blank=True, null=True)
+    position = models.PointField(blank=True, null=True)
     location = models.CharField(blank=True, null=True, max_length=256)
 
     response = models.ForeignKey(AlertResponse, models.CASCADE, null=True, blank=True, related_name="alerts")
