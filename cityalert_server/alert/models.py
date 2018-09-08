@@ -76,7 +76,7 @@ class AlertVote(models.Model):
     Used to indicate that an user confirms an existing alert
     """
     user = models.ForeignKey(settings.AUTH_USER_MODEL, models.CASCADE)
-    alert = models.ForeignKey(Alert, models.CASCADE)
+    alert = models.ForeignKey(Alert, models.CASCADE, related_name='votes')
 
     class Meta:
         unique_together = ('user', 'alert')

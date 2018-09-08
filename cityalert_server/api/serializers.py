@@ -9,6 +9,15 @@ class AlertTypeSerializer(serializers.ModelSerializer):
 
 
 class AlertSerializer(serializers.ModelSerializer):
+    votes_count = serializers.SerializerMethodField()
+    vote_by_me = serializers.SerializerMethodField()
+
+    def get_votes_count(self, instance):
+        return instance.votes.count()
+
+    def get_vote_by_me(self, instance):
+        user = self.context['request'].user
+        return instance.votes.filter(user=user).count() > 0
 
     class Meta:
         model = Alert
