@@ -9,9 +9,15 @@ class AlertTypeSerializer(serializers.ModelSerializer):
 
 
 class AlertSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Alert
         fields = "__all__"
+        read_only_fields = ['user']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        return Alert.objects.create(**validated_data, user=user)
 
 
 class AlertResponseSerializer(serializers.ModelSerializer):
