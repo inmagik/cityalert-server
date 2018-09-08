@@ -2,6 +2,13 @@ from django.db import models
 from django.conf import settings
 
 
+class Office(models.Model):
+    name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return self.name
+
+
 class AlertResponse(models.Model):
     """
     """
@@ -28,6 +35,12 @@ class AlertType(models.Model):
         return self.name
 
 
+class AlertTypeRouting(models.Model):
+
+    alert_type = models.OneToOneField(AlertType, models.CASCADE, null=True, blank=True)
+    office = models.ForeignKey(Office, models.CASCADE, null=True, blank=True)
+
+
 class Alert(models.Model):
 
     alert_type = models.ForeignKey(AlertType, models.CASCADE, null=True, blank=True)
@@ -43,5 +56,17 @@ class Alert(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
+    # will be set by server when saving the instance
+    assigned_office = models.ForeignKey(Office, models.CASCADE, null=True, blank=True)
+
     def __str__(self):
         return "%s" % self.id
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            try:
+                routing = AlertTypeRouting.objects.get(alert_type=self.alert_type)
+                self.assigned_office = routing.office
+            except AlertTypeRouting.DoesNotExist:
+                pass
+        return super(Alert, self).save(*args, **kwargs)
