@@ -10,7 +10,7 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'name', )
+        fields = ('id', 'email', 'name', 'is_staff', )
 
 class RecoverSerializer(Serializer):
     email = EmailField()
