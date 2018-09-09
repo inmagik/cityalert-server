@@ -9,6 +9,7 @@ class AlertTypeSerializer(serializers.ModelSerializer):
 
 class AlertSimilarSerializer(serializers.ModelSerializer):
     alert_type_verbose = serializers.CharField(read_only=True, source='alert_type.name')
+    user_email = serializers.CharField(read_only=True, required=False, source='user.email')
     class Meta:
         model = Alert
         fields = "__all__"
@@ -37,6 +38,7 @@ class AlertSerializer(serializers.ModelSerializer):
     image = Base64ImageField(required=False)
     response = AlertResponseSerializer(read_only=True, required=False)
     user_email = serializers.CharField(read_only=True, required=False, source='user.email')
+    assigned_office_verboser =  serializers.CharField(read_only=True, required=False, source='assigned_office.name')
 
     def get_similar_alerts(self, instance):
         return AlertSimilarSerializer(instance=instance.get_similar_alerts(), many=True).data
