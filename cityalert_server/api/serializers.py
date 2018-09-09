@@ -8,6 +8,7 @@ class AlertTypeSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class AlertSimilarSerializer(serializers.ModelSerializer):
+    alert_type_verbose = serializers.CharField(read_only=True, source='alert_type.name')
     class Meta:
         model = Alert
         fields = "__all__"
@@ -43,6 +44,16 @@ class AlertSerializer(serializers.ModelSerializer):
 
 
 class AlertResponseSerializer(serializers.ModelSerializer):
+    related_alerts = serializers.PrimaryKeyRelatedField(queryset=Alert.objects.all(), many=True, required=False, write_only=True)
+
     class Meta:
         model = AlertResponse
         fields = "__all__"
+
+    def create(self, validated_data):
+        related_alerts = validated_data.pop('related_alerts')
+        out = AlertResponse.objects.create(**validated_data)
+        for alert in related_alerts:
+            alert.response = out
+            alert.save()
+        return out
