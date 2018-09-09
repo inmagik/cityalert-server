@@ -13,11 +13,29 @@ class AlertSimilarSerializer(serializers.ModelSerializer):
         model = Alert
         fields = "__all__"
 
+
+class AlertResponseSerializer(serializers.ModelSerializer):
+    related_alerts = serializers.PrimaryKeyRelatedField(queryset=Alert.objects.all(), many=True, required=False, write_only=True)
+
+    class Meta:
+        model = AlertResponse
+        fields = "__all__"
+
+    def create(self, validated_data):
+        related_alerts = validated_data.pop('related_alerts')
+        out = AlertResponse.objects.create(**validated_data)
+        for alert in related_alerts:
+            alert.response = out
+            alert.save()
+        return out
+
+
 class AlertSerializer(serializers.ModelSerializer):
     votes_count = serializers.SerializerMethodField()
     vote_by_me = serializers.SerializerMethodField()
     similar_alerts = serializers.SerializerMethodField()
     image = Base64ImageField(required=False)
+    response = AlertResponseSerializer(read_only=True, required=False)
 
     def get_similar_alerts(self, instance):
         return AlertSimilarSerializer(instance=instance.get_similar_alerts(), many=True).data
@@ -41,19 +59,3 @@ class AlertSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = self.context['request'].user
         return Alert.objects.create(**validated_data, user=user)
-
-
-class AlertResponseSerializer(serializers.ModelSerializer):
-    related_alerts = serializers.PrimaryKeyRelatedField(queryset=Alert.objects.all(), many=True, required=False, write_only=True)
-
-    class Meta:
-        model = AlertResponse
-        fields = "__all__"
-
-    def create(self, validated_data):
-        related_alerts = validated_data.pop('related_alerts')
-        out = AlertResponse.objects.create(**validated_data)
-        for alert in related_alerts:
-            alert.response = out
-            alert.save()
-        return out
