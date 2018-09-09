@@ -13,10 +13,10 @@ class AlertSimilarSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class AlertSerializer(serializers.ModelSerializer):
-    image = Base64ImageField()
     votes_count = serializers.SerializerMethodField()
     vote_by_me = serializers.SerializerMethodField()
     similar_alerts = serializers.SerializerMethodField()
+    image = Base64ImageField(required=False)
 
     def get_similar_alerts(self, instance):
         return AlertSimilarSerializer(instance=instance.get_similar_alerts(), many=True).data
@@ -26,6 +26,8 @@ class AlertSerializer(serializers.ModelSerializer):
 
     def get_vote_by_me(self, instance):
         user = self.context['request'].user
+        if not user.pk:
+            return 0
         return instance.votes.filter(user=user).count() > 0
 
     alert_type_verbose = serializers.CharField(read_only=True, source='alert_type.name')

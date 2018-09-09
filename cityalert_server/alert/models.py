@@ -26,6 +26,8 @@ class AlertResponse(models.Model):
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default='accepted')
     security_issue = models.BooleanField(default=False)
     priority = models.IntegerField(choices=PRIORITY_CHOICES, default=1)
+    message = models.TextField(blank=True, null=True)
+    resolution_estimate_date = models.DateField(blank=True, null=True)
 
 
 class AlertType(models.Model):
