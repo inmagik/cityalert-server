@@ -18,6 +18,11 @@ class AlertViewSet(ModelViewSet):
     serializer_class = AlertSerializer
     queryset = Alert.objects.all()
 
+    def get_queryset(self):
+        # if self.request.user.is_staff:
+        #     return Alert.objects.exclude(response=None)
+        return Alert.objects.all()
+
 
 class AlertResponseViewSet(ModelViewSet):
     serializer_class = AlertResponseSerializer

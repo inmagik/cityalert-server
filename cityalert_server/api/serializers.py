@@ -7,12 +7,19 @@ class AlertTypeSerializer(serializers.ModelSerializer):
         model = AlertType
         fields = "__all__"
 
+class AlertSimilarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Alert
+        fields = "__all__"
 
 class AlertSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     votes_count = serializers.SerializerMethodField()
     vote_by_me = serializers.SerializerMethodField()
+    similar_alerts = serializers.SerializerMethodField()
 
+    def get_similar_alerts(self, instance):
+        return AlertSimilarSerializer(instance=instance.get_similar_alerts(), many=True).data
 
     def get_votes_count(self, instance):
         return instance.votes.count()

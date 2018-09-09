@@ -59,6 +59,9 @@ class Alert(models.Model):
     # will be set by server when saving the instance
     assigned_office = models.ForeignKey(Office, models.CASCADE, null=True, blank=True)
 
+    def get_similar_alerts(self):
+        return Alert.objects.filter(alert_type=self.alert_type).exclude(pk=self.pk)
+
     def __str__(self):
         return "%s" % self.id
 
