@@ -13,7 +13,7 @@ class VoteAlertView(APIView):
         return Response(AlertSerializer(instance=alert, context={'request': request}).data)
 
 class AlertViewSet(ModelViewSet):
-    filter_fields = ('alert_type', )
+    filter_fields = ('alert_type', 'response__status', )
     search_fields = ('description', )
     serializer_class = AlertSerializer
     queryset = Alert.objects.all()
