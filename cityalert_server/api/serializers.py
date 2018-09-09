@@ -36,6 +36,7 @@ class AlertSerializer(serializers.ModelSerializer):
     similar_alerts = serializers.SerializerMethodField()
     image = Base64ImageField(required=False)
     response = AlertResponseSerializer(read_only=True, required=False)
+    user_email = serializers.CharField(read_only=True, required=False, source='user.email')
 
     def get_similar_alerts(self, instance):
         return AlertSimilarSerializer(instance=instance.get_similar_alerts(), many=True).data
