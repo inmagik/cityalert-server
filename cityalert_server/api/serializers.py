@@ -38,7 +38,7 @@ class AlertSerializer(serializers.ModelSerializer):
     image = Base64ImageField(required=False)
     response = AlertResponseSerializer(read_only=True, required=False)
     user_email = serializers.CharField(read_only=True, required=False, source='user.email')
-    assigned_office_verbose =  serializers.CharField(read_only=True, required=False, source='assigned_office.name')
+    assigned_office_verbose = serializers.CharField(read_only=True, required=False, source='assigned_office.name')
 
     def get_similar_alerts(self, instance):
         return AlertSimilarSerializer(instance=instance.get_similar_alerts(), many=True).data
